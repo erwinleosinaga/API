@@ -112,7 +112,7 @@ namespace API.Repository
 
         public IEnumerable GetRegisteredData()
         {
-            var query = from employee in myContext.Set<Employee>()
+            var query = (from employee in myContext.Set<Employee>()
                         join account in myContext.Set<Account>()
                             on employee.NIK equals account.NIK
                         join profiling in myContext.Set<Profiling>()
@@ -120,7 +120,7 @@ namespace API.Repository
                         join education in myContext.Set<Education>()
                             on profiling.EducationId equals education.Id
                         join university in myContext.Set<University>()
-                            on education.Id equals university.Id
+                            on education.UniversityId equals university.Id
                         select new {
                             FullName = employee.FirstName + " " + employee.LastName,
                             PhoneNumber = employee.Phone,
@@ -130,8 +130,8 @@ namespace API.Repository
                             Degree = education.Degree,
                             GPA = education.GPA,
                             UniversityName = university.Name
-                        };
-            return query;
+                        });
+            return query.ToList();
         }
 
         public IEnumerable GetRegisteredDataAlt()
