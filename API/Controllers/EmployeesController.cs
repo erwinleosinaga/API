@@ -44,17 +44,40 @@ namespace API.Controllers
         [HttpGet("registered")]
         public ActionResult RegisteredData()
         {
-            var registeredData = employeeRepository.GetRegisteredData();
+            try
+            {
+                var registeredData = employeeRepository.GetRegisteredData();
+                if (registeredData == null)
+                {
+                    return Ok(new { status = "success", data = "no data found" });
+                }
 
-            return Ok(new { status = "success", data = registeredData });
+                return Ok(new { status = "success", data = registeredData });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { status = "failed", message = e });
+            }
+
         }
 
         [HttpGet("registeredalt")]
         public ActionResult Coba()
         {
-            var employeeAccount = employeeRepository.GetRegisteredDataAlt();
+            try
+            {
+                var registeredData = employeeRepository.GetRegisteredDataAlt();
+                if (registeredData == null)
+                {
+                    return Ok(new { status = "success", data = "no data found" });
+                }
+                return Ok(new { status = "success", data = registeredData });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { status = "failed", message = e });
+            }
 
-            return Ok(new { status = "success", data = employeeAccount });
         }
     }
 }

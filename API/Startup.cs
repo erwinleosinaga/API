@@ -28,16 +28,16 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers().AddNewtonsoftJson(x =>
-            x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            services.AddControllers()
+                .AddNewtonsoftJson(x =>x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddScoped<EmployeeRepository>();
             services.AddScoped<AccountRepository>();
             services.AddScoped<ProfilingRepository>();
             services.AddScoped<EducationRepository>();
             services.AddScoped<UniversityRepository>();
             services.AddDbContext<MyContext>(options => options
-            //.UseLazyLoadingProxies()
-            .UseSqlServer(Configuration.GetConnectionString("API")));
+                //.UseLazyLoadingProxies()
+                .UseSqlServer(Configuration.GetConnectionString("API")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

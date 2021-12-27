@@ -37,16 +37,18 @@ namespace API.Repository
             }
 
             int increment = myContext.Employees.ToList().Count;
-            string newNIK = DateTime.Now.ToString("yyyy") + "0" + increment.ToString();
+            //variabel nik
+            string formattedNIK = DateTime.Now.ToString("yyyy") + "0" + increment.ToString();
             int result;
             var employee = new Employee()
             {
-                NIK = newNIK,
+                NIK = formattedNIK,
                 FirstName = registerVM.FirstName,
                 LastName = registerVM.LastName,
                 Phone = registerVM.Phone,
                 Email = registerVM.Email,
-                Salary = registerVM.Salary
+                Salary = registerVM.Salary,
+                Gender = (Models.Gender)registerVM.Gender
             };
             try
             {
@@ -61,7 +63,7 @@ namespace API.Repository
             
             var account = new Account()
             {
-                NIK = newNIK,
+                NIK = formattedNIK,
                 Password = BCrypt.Net.BCrypt.HashPassword(registerVM.Password)
             };
             try
@@ -92,7 +94,7 @@ namespace API.Repository
 
             var profiling = new Profiling()
             {
-                NIK = newNIK,
+                NIK = formattedNIK,
                 EducationId = education.Id
             };
             try
@@ -108,7 +110,7 @@ namespace API.Repository
             return result;
         }
 
-        public IEnumerable<RegisterVM> GetRegisteredData()
+        public IEnumerable GetRegisteredData()
         {
             var query = from employee in myContext.Set<Employee>()
                         join account in myContext.Set<Account>()
@@ -117,16 +119,17 @@ namespace API.Repository
                             on account.NIK equals profiling.NIK
                         join education in myContext.Set<Education>()
                             on profiling.EducationId equals education.Id
-                        select new RegisterVM(){
-                            NIK = employee.NIK,
-                            FirstName = employee.FirstName,
-                            LastName = employee.LastName,
-                            Phone = employee.Phone,
+                        join university in myContext.Set<University>()
+                            on education.Id equals university.Id
+                        select new {
+                            FullName = employee.FirstName + " " + employee.LastName,
+                            PhoneNumber = employee.Phone,
+                            BirthDate = employee.BirthDate,
                             Salary = employee.Salary,
                             Email = employee.Email,
                             Degree = education.Degree,
                             GPA = education.GPA,
-                            UniversityId = education.UniversityId
+                            UniversityName = university.Name
                         };
             return query;
         }
@@ -137,6 +140,7 @@ namespace API.Repository
                 .Include(employee => employee.Account)
                 .ThenInclude(account => account.Profiling)
                 .ThenInclude(profiling => profiling.Education)
+                .ThenInclude(education => education.University)
                 .ToList();
             return data;
         }
