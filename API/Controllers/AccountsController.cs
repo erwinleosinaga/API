@@ -42,5 +42,58 @@ namespace API.Controllers
                 return BadRequest(new { status = "failed", message = "Unknown error" });
             }
         }
+
+        [HttpGet("forgotpassword/{email}")]
+        public ActionResult ForgotPassword(string email)
+        {
+            int ForgotPassword = accountRepository.ForgotPassword(email);
+
+            if (ForgotPassword == 2)
+            {
+                return NotFound(new { status = "failed", message = "Email not found" });
+            }            
+            if (ForgotPassword == 3)
+            {
+                return BadRequest(new { status = "failed", message = "Unknown Error" });
+            }
+
+            return Ok(new { status = "success", message = "Email sent", otp = ForgotPassword });
+        }
+
+        [HttpPost("changepassword")]
+        public ActionResult ChangePassword(ChangePasswordVM changePasswordVM)
+        {
+            //return Ok(new { nik = changePasswordVM.NIK, otp = changePasswordVM.OTP, newpassword = changePasswordVM.NewPassword });
+            var change = accountRepository.ChangePassword(changePasswordVM.NIK, changePasswordVM.OTP, changePasswordVM.NewPassword);
+
+            if (change == 2)
+            {
+                return NotFound(new { status = "failed", message = "Account not found" });
+            }
+            if (change == 3)
+            {
+                return BadRequest(new { status = "failed", message = "Invalid OTP" });
+            }            
+            if (change == 4)
+            {
+                return BadRequest(new { status = "failed", message = "OTP expired" });
+            }            
+            if (change == 5)
+            {
+                return BadRequest(new { status = "failed", message = "OTP already been used" });
+            }            
+            if (change == 6 || change == 7)
+            {
+                return BadRequest(new { status = "failed", message = "Update failed" });
+            }
+            if (change == 1)
+            {
+                return Ok(new { status = "success", message = "password changed" });
+            }
+            else
+            {
+                return BadRequest(new {status = "failed", message = "unknown error"});
+            }
+        }
     }
 }

@@ -13,8 +13,10 @@ namespace API.Models
     {
         [Key]
         public string NIK { get; set; }
-        [Required]
         public string Password { get; set; }
+        public int OTP { get; set; }
+        public DateTime ExpiredToken { get; set; }
+        public bool IsUsed { get; set; }
         //[JsonIgnore]
         public virtual Employee Employee { get; set; }
         //[JsonIgnore]
