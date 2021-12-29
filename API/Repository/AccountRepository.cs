@@ -101,7 +101,10 @@ namespace API.Repository
             message.Subject = "Forgot Password - OTP Request";
             BodyBuilder bodyBuilder = new BodyBuilder();
             //bodyBuilder.HtmlBody = $"<h1>{otp.ToString()}!</h1>";
-            bodyBuilder.TextBody = $"Your OTP {otp.ToString()}, Expired date = {expiredToken}";
+            bodyBuilder.TextBody = 
+                $"Your OTP {otp.ToString()}, please use your OTP to change your password at" +
+                $" https://localhost:44367/api/accounts/changepassword/ and provide email, OTP, " +
+                $"and NewPassword, please use your OTP before {expiredToken}";
             message.Body = bodyBuilder.ToMessageBody();
 
             SmtpClient client = new SmtpClient();
@@ -115,14 +118,22 @@ namespace API.Repository
             return 1;
         }
 
-        public int ChangePassword(string nik, int otp, string newPassword)
+        public int ChangePassword(string email, int otp, string newPassword)
         {
-            var account = Get(nik);
-
-            if (account == null)
+            var checkData = (from e in myContext.Set<Employee>()
+                             where e.Email == email
+                             join a in myContext.Set<Account>()
+                                 on e.NIK equals a.NIK
+                             select new
+                             {
+                                 a.NIK
+                             }).FirstOrDefault();
+            if (checkData == null)
             {
                 return 2; // Account not found
             }
+            var account = myContext.Accounts.Find(checkData.NIK);
+
             if (account.OTP != otp)
             {
                 return 3; // Invalid OTP
@@ -135,7 +146,6 @@ namespace API.Repository
             {
                 return 5; //OTP Already been used
             }
-
             account.Password = BCrypt.Net.BCrypt.HashPassword(newPassword);
             account.IsUsed = true;
             int update;

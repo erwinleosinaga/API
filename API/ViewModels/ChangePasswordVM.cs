@@ -10,7 +10,7 @@ namespace API.ViewModels
     public class ChangePasswordVM
     {
         //Data validation seperti [Required] bisa juga ditambahkan di sini
-        public string NIK { get; set; }
+        public string email { get; set; }
         public int OTP { get; set; }
         public string NewPassword { get; set; }
 

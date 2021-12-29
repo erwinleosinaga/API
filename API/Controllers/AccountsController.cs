@@ -64,7 +64,7 @@ namespace API.Controllers
         public ActionResult ChangePassword(ChangePasswordVM changePasswordVM)
         {
             //return Ok(new { nik = changePasswordVM.NIK, otp = changePasswordVM.OTP, newpassword = changePasswordVM.NewPassword });
-            var change = accountRepository.ChangePassword(changePasswordVM.NIK, changePasswordVM.OTP, changePasswordVM.NewPassword);
+            var change = accountRepository.ChangePassword(changePasswordVM.email, changePasswordVM.OTP, changePasswordVM.NewPassword);
 
             if (change == 2)
             {
@@ -76,11 +76,11 @@ namespace API.Controllers
             }            
             if (change == 4)
             {
-                return BadRequest(new { status = "failed", message = "OTP expired" });
+                return BadRequest(new { status = "failed", message = "OTP expired, please request new OTP" });
             }            
             if (change == 5)
             {
-                return BadRequest(new { status = "failed", message = "OTP already been used" });
+                return BadRequest(new { status = "failed", message = "OTP already been used, please request new OTP" });
             }            
             if (change == 6 || change == 7)
             {
