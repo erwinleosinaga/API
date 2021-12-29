@@ -21,7 +21,7 @@ namespace API.Context
         public DbSet<Education> Educations { get; set; }
         public DbSet<University> Universities { get; set; }
         public DbSet<Role> Roles { get; set; }
-        public DbSet<AccountRole> accountRoles { get; set; }
+        public DbSet<AccountRole> AccountRoles { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // One to One Employee -> Account
@@ -44,15 +44,15 @@ namespace API.Context
                 .WithOne(e => e.University);
             // Many to Many Account -> Role
             modelBuilder.Entity<AccountRole>()
-            .HasKey(ar => new { ar.AccountId, ar.RoleId});
+            .HasKey(ar => new { ar.AccountId, ar.RoleId}); // Composite Primary Key
             modelBuilder.Entity<AccountRole>()
                 .HasOne(ar => ar.Account)
                 .WithMany(a => a.AccountRoles)
-                .HasForeignKey(ar => ar.AccountId);
+                .HasForeignKey(ar => ar.AccountId); // Foreign key AccountId
             modelBuilder.Entity<AccountRole>()
                 .HasOne(ar => ar.Role)
                 .WithMany(r => r.AccountRoles)
-                .HasForeignKey(ar => ar.RoleId);
+                .HasForeignKey(ar => ar.RoleId); // Foreign key RoleId
         }
     }
 }

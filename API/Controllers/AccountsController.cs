@@ -50,9 +50,10 @@ namespace API.Controllers
                 {
                     new Claim("email", loginVM.Email),
                 };
+
                 foreach (var role in tokenPayload.Roles)
                 {
-                    claims.Add(new Claim("Role", role));
+                    claims.Add(new Claim("roles", role));
                 }
                 
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
@@ -127,11 +128,32 @@ namespace API.Controllers
             }
         }
 
-        [Authorize("Employee")]
+        [Authorize]
         [HttpGet("TestJWT")]
         public ActionResult TestJWT()
         {
             return Ok("Test JWT Berhasil");
+        }
+
+        [Authorize(Roles = "Employee")]
+        [HttpGet("TestEmployee")]
+        public ActionResult TestEmployee()
+        {
+            return Ok("Test JWT Employee Berhasil");
+        }
+
+        [Authorize(Roles = "Manager")]
+        [HttpGet("TestManager")]
+        public ActionResult TestManager()
+        {
+            return Ok("Test JWT Manager Berhasil");
+        }
+
+        [Authorize(Roles = "Director")]
+        [HttpGet("TestDirector")]
+        public ActionResult TestDirector()
+        {
+            return Ok("Test JWT Director Berhasil");
         }
     }
 }

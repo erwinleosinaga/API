@@ -11,7 +11,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RolesController : BaseController<Role, RoleRepository, string>
+    public class RolesController : BaseController<Role, RoleRepository, int>
     {
         public RolesController(RoleRepository roleRepository) : base(roleRepository)
         {

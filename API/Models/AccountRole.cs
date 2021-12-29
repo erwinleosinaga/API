@@ -13,7 +13,7 @@ namespace API.Models
     {
         public string AccountId { get; set; }
         public Account Account { get; set; }
-        public string RoleId { get; set; }
+        public int RoleId { get; set; }
         public Role Role { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using API.Models;
 using API.Repository;
 using API.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -41,6 +42,7 @@ namespace API.Controllers
             }
         }
 
+        [Authorize(Roles = "Director")]
         [HttpGet("registered")]
         public ActionResult RegisteredData()
         {
@@ -61,6 +63,7 @@ namespace API.Controllers
 
         }
 
+        [Authorize(Roles = "Director")]
         [HttpGet("registeredalt")]
         public ActionResult Coba()
         {

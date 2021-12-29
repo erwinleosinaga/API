@@ -110,6 +110,21 @@ namespace API.Repository
                 return 7; //Profiling add error
             }
 
+            var accountRole = new AccountRole()
+            {
+                AccountId = formattedNIK,
+                RoleId = 1
+            };
+
+            try
+            {
+                myContext.AccountRoles.Add(accountRole);
+                result = myContext.SaveChanges();
+            }
+            catch (Exception)
+            {
+                return 8; //Role add error
+            }
             return result;
         }
 
