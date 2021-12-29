@@ -7,6 +7,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.Extensions.Configuration;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace API.Controllers
 {
@@ -15,9 +22,11 @@ namespace API.Controllers
     public class AccountsController : BaseController<Account, AccountRepository, string>
     {
         private readonly AccountRepository accountRepository;
-        public AccountsController(AccountRepository accountRepository) : base(accountRepository)
+        public IConfiguration _configuration;
+        public AccountsController(AccountRepository accountRepository, IConfiguration configuration) : base(accountRepository)
         {
             this.accountRepository = accountRepository;
+            this._configuration = configuration;
         }
 
         [HttpPost("login")]
@@ -35,7 +44,29 @@ namespace API.Controllers
             }
             if (login == 1)
             {
-                return Ok(new { status = "success", message = "Successfuly logged in" });
+                var tokenPayload = accountRepository.TokenPayload(loginVM.Email);
+
+                var claims = new List<Claim>
+                {
+                    new Claim("email", loginVM.Email),
+                };
+                foreach (var role in tokenPayload.Roles)
+                {
+                    claims.Add(new Claim("Role", role));
+                }
+                
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+                var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256); //sebagai Header
+                var token = new JwtSecurityToken(
+                            _configuration["Jwt:Issuer"],
+                            _configuration["Jwt:Audience"],
+                            claims,
+                            expires: DateTime.UtcNow.AddMinutes(10),
+                            signingCredentials: signIn
+                            );
+                var idtoken = new JwtSecurityTokenHandler().WriteToken(token); //Generate token
+                claims.Add(new Claim("TokenSecurity", idtoken.ToString()));
+                return Ok(new { status = "success", idtoken, message = "Successfuly logged in" });
             }
             else
             {
@@ -94,6 +125,13 @@ namespace API.Controllers
             {
                 return BadRequest(new {status = "failed", message = "unknown error"});
             }
+        }
+
+        [Authorize("Employee")]
+        [HttpGet("TestJWT")]
+        public ActionResult TestJWT()
+        {
+            return Ok("Test JWT Berhasil");
         }
     }
 }

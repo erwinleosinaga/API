@@ -19,8 +19,36 @@ namespace API.Repository
             this.myContext = myContext;
         }
 
+        public LoginDataVM TokenPayload(string email)
+        {
+            var query = (from employee in myContext.Set<Employee>()
+                         where employee.Email == email
+                         join account in myContext.Set<Account>()
+                             on employee.NIK equals account.NIK
+                         join accountRole in myContext.Set<AccountRole>()
+                            on account.NIK equals accountRole.AccountId
+                         join role in myContext.Set<Role>()
+                            on accountRole.RoleId equals role.Id
+                         select new
+                         {
+                             role.Name
+                         }).ToList();
 
+            List<string> roles = new List<string>();
 
+            foreach (var item in query)
+            {
+                roles.Add(item.Name);
+            }
+
+            LoginDataVM payload = new LoginDataVM
+            {
+                Email = email,
+                Roles = roles
+            };
+
+            return payload;
+        }
         public int Login(string email, string password)
         {
             var checkData = (from employee in myContext.Set<Employee>()
@@ -46,7 +74,7 @@ namespace API.Repository
                 return 3; //Pasword salah
             }
             else
-            {
+            { 
                 return 1; //Berhasil login
             }
         }
