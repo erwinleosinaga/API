@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("Api/[controller]")]
     [ApiController]
     public class AccountRolesController : BaseController<AccountRole, AccountRoleRepository, string>
     {
@@ -20,8 +20,9 @@ namespace API.Controllers
         {
             this.accountRoleRepository = accountRoleRepository;
         }
+
         [Authorize(Roles = "Director")]
-        [HttpGet("signmanager/{nik}")]
+        [HttpGet("SignManager/{nik}")]
         public ActionResult SignManager(string nik)
         {
             var assign = accountRoleRepository.SignManager(nik);

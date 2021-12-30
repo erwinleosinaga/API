@@ -24,15 +24,9 @@ namespace API.ViewModels
         [EmailAddress] // Harus format email
         public string Email { get; set; }
         [Required]
-        public Gender Gender { get; set; }
         public string Password { get; set; }
         public string Degree { get; set; }
         public double GPA { get; set; }
         public int UniversityId { get; set; }
-    }
-    public enum Gender
-    {
-        Male,
-        Female
     }
 }

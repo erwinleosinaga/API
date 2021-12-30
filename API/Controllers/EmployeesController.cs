@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("Api/[controller]")]
     [ApiController]
     public class EmployeesController : BaseController<Employee, EmployeeRepository, string>
     {
@@ -21,7 +21,7 @@ namespace API.Controllers
             this.employeeRepository = employeeRepository;
         }
 
-        [HttpPost("register")] //localhost/api/employee/register
+        [HttpPost("Register")] //localhost/api/employee/register
         public ActionResult Register(RegisterVM registerVM)
         {
             try
@@ -43,7 +43,7 @@ namespace API.Controllers
         }
 
         [Authorize(Roles = "Director")]
-        [HttpGet("registered")]
+        [HttpGet("Registered")]
         public ActionResult RegisteredData()
         {
             try
@@ -64,7 +64,7 @@ namespace API.Controllers
         }
 
         [Authorize(Roles = "Director")]
-        [HttpGet("registeredalt")]
+        [HttpGet("Registeredalt")]
         public ActionResult Coba()
         {
             try
@@ -81,6 +81,12 @@ namespace API.Controllers
                 return BadRequest(new { status = "failed", message = e });
             }
 
+        }
+
+        [HttpGet("TestCORS")]
+        public ActionResult TestCORS()
+        {
+            return Ok("Test CORS Berhasil");
         }
     }
 }

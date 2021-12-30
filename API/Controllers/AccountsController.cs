@@ -17,7 +17,7 @@ using System.Data;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("Api/[controller]")]
     [ApiController]
     public class AccountsController : BaseController<Account, AccountRepository, string>
     {
@@ -29,7 +29,7 @@ namespace API.Controllers
             this._configuration = configuration;
         }
 
-        [HttpPost("login")]
+        [HttpPost("Login")]
         public ActionResult Login(LoginVM loginVM)
         {
             var login = accountRepository.Login(loginVM.Email, loginVM.Password);
@@ -75,7 +75,7 @@ namespace API.Controllers
             }
         }
 
-        [HttpGet("forgotpassword/{email}")]
+        [HttpGet("ForgotPassword/{email}")]
         public ActionResult ForgotPassword(string email)
         {
             int ForgotPassword = accountRepository.ForgotPassword(email);
@@ -92,7 +92,7 @@ namespace API.Controllers
             return Ok(new { status = "success", message = "Email sent", otp = ForgotPassword });
         }
 
-        [HttpPost("changepassword")]
+        [HttpPost("ChangePassword")]
         public ActionResult ChangePassword(ChangePasswordVM changePasswordVM)
         {
             //return Ok(new { nik = changePasswordVM.NIK, otp = changePasswordVM.OTP, newpassword = changePasswordVM.NewPassword });
