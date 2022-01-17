@@ -4,24 +4,26 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using API.Models;
 
 namespace API.ViewModels
 {
     public class RegisterVM
     {
-        //Data validation seperti [Required] bisa juga ditambahkan di sini
+     
         public string NIK { get; set; }
         [Required]
         [MinLength(3)]
         public string FirstName { get; set; }
         [Required]
         public string LastName { get; set; }
+        public Gender Gender { get; set; }
         [Phone]
         public string Phone { get; set; }
         public DateTime BirthDate { get; set; }
-        [Range(0, 500000000)] //Harus pada rentang Rp0 hingg Rp500juta
+        [Range(0, 500000000)] 
         public int Salary { get; set; }
-        [EmailAddress] // Harus format email
+        [EmailAddress]
         public string Email { get; set; }
         [Required]
         public string Password { get; set; }

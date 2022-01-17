@@ -120,7 +120,7 @@ namespace API.Repository
         {
             MimeMessage message = new MimeMessage();
 
-            MailboxAddress from = new MailboxAddress("Admin", "strway001@gmail.com");
+            MailboxAddress from = new MailboxAddress("Admin", "erwindev.tech@gmail.com");
             message.From.Add(from);
 
             MailboxAddress to = new MailboxAddress("User", email);
@@ -137,7 +137,7 @@ namespace API.Repository
 
             SmtpClient client = new SmtpClient();
             client.Connect("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
-            client.Authenticate("strway001@gmail.com", "bismillah99!");
+            client.Authenticate("erwindev.tech@gmail.com", "Windows10*889#");
 
             client.Send(message);
             client.Disconnect(true);

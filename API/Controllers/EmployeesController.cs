@@ -21,19 +21,24 @@ namespace API.Controllers
             this.employeeRepository = employeeRepository;
         }
 
-        [HttpPost("Register")] //localhost/api/employee/register
+        [HttpPost("Register")] 
         public ActionResult Register(RegisterVM registerVM)
         {
             try
             {
                 var register = employeeRepository.Register(registerVM);
-                if (register == 1)
+                if (register == 2)
                 {
-                    return Created("", new { status = "success", data = registerVM, message = "Successfully Registered" });
+                    return BadRequest(new { status = "failed", message = "duplicate email" });
+                    //return Created("", new { status = "success", data = registerVM, message = "Successfully Registered" });
+                }
+                else if(register == 3)
+                {
+                    return BadRequest(new { status = "failed", message = "duplicate phones" });
                 }
                 else
                 {
-                    return BadRequest(new { status = "failed", message = "unexpected error" });
+                    return Created("", new { status = "success", data = registerVM, message = "Successfully Registered" });
                 }
             }
             catch (Exception e)
@@ -42,25 +47,89 @@ namespace API.Controllers
             }
         }
 
-        [Authorize(Roles = "Director")]
+        //[Authorize(Roles = "Director")]
         [HttpGet("Registered")]
         public ActionResult RegisteredData()
         {
             try
             {
-                var registeredData = employeeRepository.GetRegisteredData();
-                if (registeredData == null)
+                var result = employeeRepository.GetRegisteredData();
+                if (result == null)
                 {
                     return Ok(new { status = "success", data = "no data found" });
                 }
 
-                return Ok(new { status = "success", data = registeredData });
+                //return Ok(new { status = "success", data = registeredData });
+                return Ok(result);
             }
             catch (Exception e)
             {
                 return BadRequest(new { status = "failed", message = e });
             }
 
+        }
+
+        [HttpGet("Registered/{NIK}")]
+        public ActionResult RegisteredDataByNik(string NIK)
+        {
+            try
+            {
+                var registeredData = employeeRepository.GetRegisteredDataByNIK(NIK);
+                if (registeredData == null)
+                {
+                    return NotFound();
+                }
+
+                //return Ok(new { status = "success", data = registeredData });
+                return Ok(registeredData);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { status = "failed", message = e });
+            }
+
+        }
+
+
+        [HttpDelete("Registered/{nik}")]
+        public ActionResult DeleteRegistered(string nik)
+        {
+            try
+            {
+                var delete = employeeRepository.DeleteRegistered(nik);
+                if (delete == 2)
+                {
+                    return NotFound(new
+                    {
+                        status = "failed",
+                        message = "Record not found"
+                    });
+                }
+                if (delete > 0)
+                {
+                    return Ok(new
+                    {
+                        status = "success",
+                        message = "record successfuly deleted"
+                    });
+                }
+                else
+                {
+                    return BadRequest(new
+                    {
+                        status = "failed",
+                        message = "bad request"
+                    });
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new
+                {
+                    status = "failed",
+                    message = "bad request " + e
+                });
+            }
         }
 
         [Authorize(Roles = "Director")]
@@ -81,6 +150,25 @@ namespace API.Controllers
                 return BadRequest(new { status = "failed", message = e });
             }
 
+        }
+
+        [HttpGet("GenderStat")]
+        public ActionResult GenderStat()
+        {
+            try
+            {
+                var data = employeeRepository.GetGenderStat();
+                if (data == null)
+                {
+                    return Ok(new { status = "success", data = "no data found" });
+                }
+
+                return Ok(new { status = "success", data = data });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { status = "failed", message = e });
+            }
         }
 
         [HttpGet("TestCORS")]

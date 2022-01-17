@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "401 Unauthorized";
+    
+}
+
+<div class="text-center">
+    <h1 class="display-4">401 Anauthorized</h1>
+    <p class="text-white mt-4" style="font-style:italic">
+        You will be redirected in <span id="time">5</span>
+    </p>
+
+</div>
+
+<script>
+    // Set the date we're counting down to
+    var second = 5;
+
+    // Update the count down every 1 second
+    var setTimer = setInterval(function () {
+        if (second <= 0) {
+            document.getElementById("time").innerHTML = 0;
+        }
+        else if (second > 0) {
+            document.getElementById("time").innerHTML = second - 1;
+        }
+        second -= 1;
+    }, 1000);
+    setTimeout(function () {
+        window.location.href = "/Login";
+    }, second * 1000);
+
+</script>

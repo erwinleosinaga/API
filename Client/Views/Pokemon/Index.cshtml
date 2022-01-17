@@ -1,0 +1,83 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+
+}
+
+<h1 class="mb-5">List Pokemon</h1>
+<table class="table table-dark mt-5" id="tablePoke">
+    <thead>
+        <tr>
+            <th>No</th>
+            <th>Nama</th>
+            <th>URL</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody class=" tablePoke table-light" style="color:black">
+        <tr>
+            <td>1</td>
+            <td>tessting</td>
+   
+            <td>
+                <button class="btn btn-primary">Detail</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="modal fade" id="getPoke" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header justify-content-center">
+                <h2 class="text-primary">
+                    <div class="modalName">
+
+                    </div>
+                </h2>
+            </div>
+            <div class="modal-body" id="detailModal">
+                <div class="container">
+
+                    <div class="text-center" id="detailImage">
+                        <img src="" alt="" />
+                    </div>
+                    <div class="row">
+                        <span class="badge" style="font-size: 20px; margin: auto">pokemon</span>
+                    </div>
+                    <div class="text-center bg-info mt-3" style="color: white;"><b>Detail</b></div>
+                    <div style="color: black ">
+
+                        <div class="row mt-2">
+                            <div class="col"><b>Ability</b></div>
+                            <div class="ability col">Pokemon</div>
+                        </div>
+                        <div class="row">
+                            <div class="col"><b>Weight</b></div>
+                            <div class="weight col">100</div>
+                        </div>
+                        <div class="row">
+                            <div class="col"><b>Height</b></div>
+                            <div class="height col">200</div>
+                        </div>
+                    </div>
+                    <div class="text-left bg-secondary" style="color: white "></div>
+                    <div style="color: black " id="stat">
+
+                    </div>
+                </div>
+               
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script src="~/js/site.js"></script>
+   
+
+}
